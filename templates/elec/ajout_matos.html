@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "elec.views.ajout_matos" %}">
+			<h2 class = "ui inverted blue block header">Ajouter du matos</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom</label>
+				<div class = "ui left labeled icon input">
+					<input name = "name" id = "name" type = "text">
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "price">Marque</label>
+				<div class = "ui left labeled icon input">
+					<input name = "brand" id = "brand" type = "text">
+					<i class = "euro icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "entity">Type</label>
+				<div class = "ui selection dropdown">
+					<input name = "kind" id = "kind" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Type</div>
+				    <div class = "menu">
+				    	{% for kind in liste_kinds %}
+								<div class = "item">{{ kind }}</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "shortcut">Référence</label>
+				<div class = "ui left labeled icon input">
+					<input name = "ref" id = "ref" type = "text">
+					<i class = "keyboard icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "stock">Quantité</label>
+				<div class = "ui left labeled icon input">
+					<input name = "quantity" id = "quantity" type = "text">
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			<div class = "field"> <!--Pour chaque nouveau champ-->
+				<div class="ui calendar" id="facture_calendar">
+					<label for = "calendrier"><b>Date de l'achat</b></label>
+					<div class = "ui left labeled icon input">
+						<i class="calendar icon"></i> <!--Pour le choix de la petite icone à droite du champ-->
+						<input name = "purchase_date" type="text" placeholder="Date/Heure">
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "price">Prix d'achat</label>
+				<div class = "ui left labeled icon input">
+					<input name = "purchase_value" id = "purchase_value" type = "text">
+					<i class = "euro icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "entity">Stockage Habituel</label>
+				<div class = "ui selection dropdown">
+					<input name = "usual_stockage" id = "usual_stockage" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Choisir un local</div>
+				    <div class = "menu">
+				    	{% for local in liste_locaux %}
+								<div class = "item">{{ local }}</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "entity">Stockage Actuel</label>
+				<div class = "ui selection dropdown">
+					<input name = "current_place" id = "current_place" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Choisir un local</div>
+				    <div class = "menu">
+				    	{% for local in liste_locaux %}
+								<div class = "item">{{ local }}</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "name">Etat</label>
+				<div class = "ui left labeled icon input">
+					<input name = "state" id = "state" type = "text">
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "name">Commentaire</label>
+				<div class = "ui left labeled icon input">
+					<input name = "comment" id = "comment" type = "text">
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

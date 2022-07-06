@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+
+<div class = "ui center aligned grid">    <!--On se sert d'une grille pour répartir les principaux blocs dans la page-->
+	<div class = "ten wide column"> 
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.reservationCarteMetro" %}"> <!--On doit définir un form car on va récupérer des donnée dans notre page via un formulaire, on va donc chercher notre view-->
+			<h2 class = "ui inverted blue block header">Réserver la carte Métro</h2> <!--En tete de titre du tableau-->
+			{% csrf_token %} <!--obligatoire pour recuperer les infos de l'utilisateur qui consulte la page et pour identifier sa requete-->
+				<div class = "field"> <!--Pour chaque nouveau champ-->
+				<div class="ui calendar" id="metro_calendar">
+					<label for = "calendrier"><b>À quel moment ?</b></label>
+					<div class = "ui left labeled icon input">
+						<i class="calendar icon"></i> <!--Pour le choix de la petite icone à droite du champ-->
+						<input name = "desired_date" type="text" placeholder="Date/Heure">
+					</div>
+				</div><!--Toute balise ouverte doit etre fermee cad soit : un <div blablablabla> ou alors <div blabla> BLABLABALABaLBA </div> -->
+				</div>
+
+				<div class = "field">
+					<label for = "entity">Qui en a besoin ?</label> 
+					<div class = "ui selection dropdown"> <!--Liste déroulante-->
+						<input name = "associated_entity" id = "entity" type = "hidden"> <!--Ici, on indique dans le nom du champ, le nom de la variable que l'on va récuperer pour l'esploiter dans le python-->
+						<i class ="dropdown icon"></i> 
+						<div class = "default text">Institution/Boquette</div> 
+						<div class = "menu">
+							{% for entite in liste_entites %} <!--Permet de faire de sorte à ce que la liste soit adaptée au différents boquettes auxquelles l'utilisateur possède les autorisation-->
+								{% if request.user|has_group:entite %} <!--Vérification des autorisations utilisateur-->
+									<div class = "item">{{ entite }}</div>
+								{% endif %} <!--il n'y a pas d'indentation en HTML, donc les fins de si et de for sont obligatoires != python -->
+							{% endfor %} 
+						</div>
+					</div>
+				</div>
+				
+				<div class = "field">
+					<label for = "description">Pour quelle raison ?</label>
+					<div class = "ui left labeled icon input"> 
+						<input name = "description" id = "description" type = "text" value="" placeholder="Description (optionel)">
+						<i class = "edit icon"></i>
+					</div>
+				</div>
+				<input name = "form_id" id = "form_id" type = "hidden" value="1"> <!--Comme la page contient plusieurs formulaires, il faut les identifier du coup, on ajoute une variable form_id que l'on cache dans la page car l'utilisateur s'en fiche-->
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Envoyer la demande</button> <!-- le type Sumit permet d'envoyer le formulaire -->
+		</form>	
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.reservationCarteMetro" %}">
+			{% csrf_token %}	 <!-- On est dans un autre formulaire alors on doit remettre le toker pour les memes raisons que ci-dessus-->
+			<input name = "form_id" id = "form_id" type = "hidden" value="2"> 
+			<table class="ui celled table"> <!-- On indique qu'on va utiliser un tableau-->
+			<thead>  <!--Tout ce qui va suivre va définir l'en-tete du tableau-->
+				<tr>
+					<th class = "center aligned single line">Date de la demande</th> <!-- A chaque nouvelle balise <th> on créer une nouvelle colonne dans notre tableau qui portera le nom indiquée-->
+					<th class = "center aligned single line">Demandeur</th>
+					<th class = "center aligned single line">Institution / Boquette</th>
+					<th class = "center aligned single line">Description</th>
+					<th class = "center aligned single line">Statut</th>
+				</tr> 
+			</thead>
+			<tbody> <!--Ici commence le corps du tableau-->
+			{% for resa in listeresacartemetro %} <!-- On récupère les données de chaque réservation à afficher sous la forme d'une liste de liste, du coup on va parcourir les éléments de cette liste-->
+				<tr> <!-- nouvelle ligne du tableau-->
+					<td class = "center aligned single line">{{ resa.1 }}</td> <!--nouvelle cellule dans la ligne, on récupère donc les infos de la résa - A noter que les élèments d'une liste s'appellent par un liste.index_de_lelement et non pas un liste[index_de_lelement] comment en python-->
+					<td class = "center aligned single line">{{ resa.2 }}</td> 
+					<td class = "center aligned single line">{{ resa.3 }}</td>
+					<td class = "center aligned single line">{{ resa.4 }}</td>
+					
+
+							{% if resa.5 == None %} <!-- resa.5 correspond au statut de la réservation None => en cours de traitement -->
+								{% if request.user|has_group:"gripsserie_cercle" %} <!--On va distinguer l'affichage en fonction des droits, si l'utilisateur a les droits de trésorier O, alors il pourra accepter ou refuser la réservation-->
+									<td class = "center aligned single line"> <!-- pour forcer l'affichage des boutons sur une seule ligne-->
+										<div class="ui center buttons"> 
+										<button type="submit" class="ui positive submit button" name = "accept_resa" value="{{ resa.0 }}">Accepter</button> <!-- comme le nom du bouton est accept_resa, on récupèrera une variable qui accept_resa dans le python qui aura pour valeur l'id de la résa à accepter-->
+										<div class="or" data-text="ou"></div>
+										<button type="submit" class="ui negative submit button" name = "refuse_resa" value="{{ resa.0 }}">Annuler</button> <!--idem pour le refus-->
+										</div>
+									</td>
+								
+								{% else %} <!-- si c'est un utilisateur lambda, il a seulement accès à l'état de la validation, qui est "En cours" puique resa.5==None-->
+									<td class = "center aligned single line">En attente de validation</td>
+								{% endif %}
+							
+							{% elif resa.5 == "cancelled" %} <!-- Si la resa est annulée, alors tout le monde (y compris gripss O) peut voir son état-->
+								<td class = "center aligned single line">
+									<i class="icon close"></i> Demande refusée par {{ resa.6 }} <!--On récupère en resa.6 l'utilisateur qui a annulé la réservation-->
+								</td>
+							{% elif resa.5 == "validated" %} <!--idem annulation-->
+								<td class = "center aligned single line">
+									<i class="icon checkmark"></i> Demande validée par {{ resa.6 }}
+								</td>
+							{% endif %}
+
+					
+				</tr> <!-- pour indiquer que la ligne est terminée-->
+			{% endfor %} <!-- une fois que toutes les réservations de la liste sont générées-->
+
+			</tbody> 
+		</table>	
+			
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

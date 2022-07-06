@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">	
+	<div class = "row">
+	<div class = "column">
+		<div class = "ui segment">
+		<h3 class = "ui inverted blue block center header">Liste du matériel</h3>
+		{% if listproduct %}
+			<table class = "ui celled table">
+			<thead>
+			<tr>
+				<th class = "center aligned single line">Nom</th>
+				<th class = "center aligned single line">Marque</th>
+				<th class = "center aligned single line">Référence</th>
+				<th class = "center aligned single line">Type</th>
+				<th class = "center aligned single line">Quantité</th>
+				<th class = "center aligned single line">Date d'achat</th>
+				<th class = "center aligned single line">Etat</th>
+				<th class = "center aligned single line">Edition</th>
+				
+			</tr>
+			</thead>			
+			{% for i in listproduct %}
+			<form method="POST" action = "{% url "elec.views.inventaire" %}">
+				{% csrf_token %}
+				<tr>
+					{% for j in i %}
+						{% if forloop.first %}
+						{% elif forloop.counter0 == 4 %}
+							{% for kind in kinds %}
+								{% if kind.0 == j %}
+									<td class = "center aligned single line">{{ kind.1 }}</td>
+								{% endif %}
+							{% endfor %}
+						{% else %}
+							<td class = "center aligned single line">{{ j }}</td>
+						{% endif %}
+					{% endfor %}
+				<td class = "center aligned single line">
+				<button class = "ui center blue submit button" type = "submit" name = "edit_product" value = "{{ forloop.counter0 }}">Editer</button></td>
+				<!--
+				<td class = "center aligned single line">
+				<button class = "ui center blue submit button" type = "submit" name = "delete_product" value = "{{ forloop.counter0 }}">Supprimer</button></td>
+				</tr>
+				-->
+			</form>
+			{% endfor %}
+			<p></p>
+			</table>
+		{% else %}
+			<p></p>
+			Vide !
+		{% endif %}
+		</div>
+	</div></div>
+	</div>
+</div>
+
+{% endblock %}

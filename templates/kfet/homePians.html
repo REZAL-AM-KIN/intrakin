@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% if target_header %}
+
+	<!--HEADER-->
+	{% if target_credit >= 0 %} 
+	<div class= "ui green  secondary inverted clearing segment" >
+	{% else %}
+	<div class= "ui red secondary inverted clearing segment" >
+	{% endif %}
+		<h1 class="ui left floated black header">
+			<i class="user icon"></i>
+			<div class="content">
+		    	{{ target_header }}
+				<div class="sub header">Ici le PG peut avoir un commentaire de ses co-prom'ss</div>
+			</div>
+		</h1>
+		<h1 class="ui right floated black header">
+			<i class="euro sign icon"></i>
+			<div class="content">
+		    	{{ target_credit }}
+			</div>
+		</h1>
+	</div>
+	
+	<!--UTILISATEUR AUTHENTIFIE-->
+	{% if user.is_authenticated %}
+	
+	<div class="two column stackable divided ui grid">
+		
+		<!--COLONNE GAUCHE-->
+		<div class="eight wide column">
+			
+			<!--TOUS LES PRODUITS-->
+			<h4 class="ui horizontal divider header">
+				<i class="cocktail icon"></i>
+				Tous les produits
+			</h4>
+			<div class="ui fluid center aligned segment">
+				<form action = "{% url "kfet.views.homePians" %}?entity={{entity}}&pg={{pg}}" method = "post">
+					<div class="ui large fluid search selection dropdown" id="search-select">
+						<input type="hidden" name="produit_id" id = "produit_id">
+						<i class="dropdown icon"></i>
+						<div class="default text">Rechercher un produit ... (Alt+P)</div>
+						<div class="menu">
+							{% for produit in list_produit %}
+								<div class="item" data-value='{{ produit.0 }}'>{{ produit.1 }}</div>
+							{% endfor %}
+						</div>
+					</div>
+					</br>
+					</br>
+					<input name = "input_sent", type = "hidden" value="true">
+					<input type="submit" class="ui fluid positive huge button" value="Debucquer ce produit">
+					{% csrf_token %}
+				</form>
+				</br>
+				{% if messages %}
+					{% for msg in messages %}
+						<div class = "ui floating message {% if msg.tags %} {{ msg.tags }} {% endif%}" id="pians-msg">
+							<i class = "close icon"></i>
+							{{ msg|safe }}
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+			
+			<!--HISTORIQUE-->
+			<h4 class="ui horizontal divider header">
+				<i class="history icon"></i>
+				Historique récent
+			</h4>
+			<div class="ui fluid center aligned segment">
+				<table class = "ui celled aligned padded table">
+					<thead>
+						<tr>
+							<th class = "center aligned">Montant</th>
+							<th class = "center aligned">Description</th>
+							<th class = "center aligned">Date</th>
+							<th class = "center aligned">Caissier</th>
+						<tr>
+					</thead>
+					<tbody>
+						{% for i in listmatch|slice:":10" %}
+							{% if i|last == "ci" %}
+								<tr class = "positive">
+							{% elif i|last == "trvp" or i|last == "trb" %}
+								<tr class = "warning">
+							{% elif i|last == "trpg" and i.0 == bucquepg %}
+								<tr class = "positive">
+							{% elif i|last == "trpg" and i.0 != bucquepg %}
+								<tr class = "negative">
+							{% else %}
+								<tr>
+							{% endif %}
+							{% for j in i|slice:"1:-1" %}
+									<td class = "center aligned single line">{{ j }}</td>
+							{% endfor %}
+								</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+		
+		<!--COLONNE DROITE-->
+		<div class="eight wide column">
+			
+			<!--BOUTONS PRODUITS-->
+			<h4 class="ui horizontal divider header">
+				<i class="star icon"></i>
+				Produits favoris
+			</h4>
+			<div class="ui fluid segment">
+				<form action = "{% url "kfet.views.homePians" %}?entity={{entity}}&pg={{pg}}" method = "post">
+					{% csrf_token %}
+					<div class="ui stackable grid">
+						{% for produit_favoris in list_favorite_product %}
+							<div class="eight wide column">
+								{% if produit_favoris.2 <= target_credit %}
+								<button class="fluid ui green button" type='submit' name='produit_id' value='{{ produit_favoris.0 }}'>
+								{% else %}
+								<button class="fluid ui red button" type='submit' name='produit_id' value='{{ produit_favoris.0 }}'>
+								{% endif %}
+								{{ produit_favoris.1 }} - {{ produit_favoris.2 }}€
+								</button>
+							</div>
+						{% endfor %}
+					</div>
+				</form>
+			</div>
+			
+			<!--OPTIONS-->
+			<h4 class="ui horizontal divider header">
+				<i class="list icon"></i>
+				Options
+			</h4>
+			<div class="ui fluid center aligned segment">
+				<div class="ui fluid blue button">
+					<i class="home icon"></i>Retour à la page d'accueil
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui fluid animated fade negative button">
+					<div class="visible content"><i class="undo alternate icon"></i>Annuler le debucquage</div>
+					<div class="hidden content">{{listmatch.0.2}} - {{listmatch.0.1}}€</div>
+				</div>
+				<div class="ui divider"></div>
+				<div class="ui fluid yellow button">
+					<i class="euro icon"></i>Recharger le compte
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<!--UTILISATEUR NON AUTHENTIFIE-->
+	{% else %}
+		<div class="one column center aligned stackable divided ui grid">
+			<div class="eight wide column">
+				<h4 class="ui horizontal divider header">
+					<i class="history icon"></i>
+					Historique récent
+				</h4>
+				<div class="ui fluid center aligned segment">
+					<table class = "ui celled aligned padded table">
+						<thead>
+							<tr>
+								<th class = "center aligned">Montant</th>
+								<th class = "center aligned">Description</th>
+								<th class = "center aligned">Date</th>
+								<th class = "center aligned">Caissier</th>
+							<tr>
+						</thead>
+						<tbody>
+							{% for i in listmatch|slice:":20" %}
+								{% if i|last == "ci" %}
+									<tr class = "positive">
+								{% elif i|last == "trvp" or i|last == "trb" %}
+									<tr class = "warning">
+								{% elif i|last == "trpg" and i.0 == bucquepg %}
+									<tr class = "positive">
+								{% elif i|last == "trpg" and i.0 != bucquepg %}
+									<tr class = "negative">
+								{% else %}
+									<tr>
+								{% endif %}
+								{% for j in i|slice:"1:-1" %}
+									<td class = "center aligned single line">{{ j }}</td>
+								{% endfor %}
+									</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	{% endif %}
+
+{% endif %}
+{% endblock %}

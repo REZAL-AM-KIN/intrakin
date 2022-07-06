@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.entityaccounting" %}">
+			{% csrf_token %}
+			<div class - "row">
+				<h3 class ="ui inverted blue block center header">Sélection de l'entité</h3>
+			
+				
+				<label for = "entity">Sélectionner l'entité :</label> 
+					<div class = "ui selection dropdown"> <!--Liste déroulante-->
+						<input name = "associated_entity" id = "entity" type = "hidden"> <!--Ici, on indique dans le nom du champ, le nom de la variable que l'on va récuperer pour l'esploiter dans le python-->
+						<i class ="dropdown icon"></i> 
+						<div class = "default text">Institution/Boquette</div> 
+						<div class = "menu">
+							{% for entite in liste_entites %} <!--Permet de faire de sorte à ce que la liste soit adaptée au différents boquettes auxquelles l'utilisateur possède les autorisation-->
+								{% if request.user|has_group:entite %} <!--Vérification des autorisations utilisateur-->
+									<div class = "item">{{ entite }}</div>
+								{% endif %} <!--il n'y a pas d'indentation en HTML, donc les fins de si et de for sont obligatoires != python -->
+							{% endfor %} 
+						</div>
+					</div>
+				<button class = "ui center blue submit button" type = "submit" name = "see_accounting">Go !</button>
+
+			</div>
+			
+		</form>
+	</div>
+</div>
+
+{% endblock %}

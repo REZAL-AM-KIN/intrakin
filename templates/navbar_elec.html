@@ -1,0 +1,19 @@
+{% load extra_filters %}
+<div class = "ui inverted yellow grid menu">
+	<a class = "item link" href = "{% url "about_elec" %}">
+		<i class = "bolt icon"></i>
+		ELEC
+	</a>
+	<a class = "item link" href = "{% url "inventaire" %}">
+		<i class = "list alternate icon"></i>
+		Inventaire
+	</a>
+	<a class = "item link" href = "{% url "ajout_matos" %}">
+		<i class = "plus icon"></i>
+		Ajout Matos
+	</a>
+	<a class = "item link" href = "{% url "entree_sortie_matos" %}">
+		<i class = "exchange icon"></i>
+		Entree/Sortie
+	</a>
+</div>

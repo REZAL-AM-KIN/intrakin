@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body %}
+<div class = "ui two column center aligned grid">
+	<div class = "row">
+		<div class = "column">
+			<div class = "ui raised segment">
+				<h3 class = "ui inverted blue block header">Connexion</h3>
+				<form class = "ui form" action = {% if request.path == "/loginPians/" %} "{% url "users.views.loginPagePians" %}" {% elif request.path == "/logincPians/" %} "{% url "users.views.loginPagecPians" %}" {% else %} "{% url "users.views.loginPage" %}" {% endif %} method = "post">
+					{% csrf_token %}
+					<div class = "two fields">
+						<div class = "field">
+							<label for = "id_user">Nom d'utilisateur</label>
+							<div class = "ui left icon input">
+								<input type = "text" id = "id_user" name = "user">
+								<i class = "user icon"></i>
+							</div>
+						</div>
+						<div class = "field">
+							<label for = "id_password">Mot de passe</label>
+							<div class = "ui left icon input">	
+								<input type = "password" id = "id_password" name = "password">
+								<i class = "lock icon"></i>
+							</div>
+						</div>
+					</div>
+				<button type = "submit" value = "Submit" class = "ui center blue submit button">Connexion</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% load extra_filters %}
+<div class = "ui inverted grid menu">
+	<a class = "item link" href = "{% url "users.views.index" %}">
+		<i class = "home icon"></i>
+		Accueil
+	</a>
+	{% block navbar_links %}
+	<a class = "item ui top right" href = "{% url "inscription" %}">
+		<i class = "user icon"></i>
+		Inscription
+	</a>
+	{% endblock %}
+	{% block navbar_menu %}
+	<a class = "item link" href = "{% url "users.views.loginPage" %}">
+		<i class = "sign in icon"></i>
+		Connexion
+	</a>
+	<a class = "item link" href = "{% url "password_reset" %}">
+		<i class = "unlock icon"></i>
+		Mot de passe oublié ?
+	</a>
+	{% endblock %}
+	<a class = "item link" href = "http://confluence.rezal.fr">
+		<i class = "book icon"></i>
+		<b>AIDE</b>
+	</a>
+	<a class = "item link" href = "{% url "users.views.about" %}">
+		<i class = "inverted info circle icon"></i>
+		A propos
+	</a>
+</div>
+{% if gadz.is_debucquable %}
+		{% include "navbar_kfet.html" %}
+{% endif %}
+
+
+{% if messages %}
+	{% for msg in messages %}
+	<div class = "ui floating message {% if msg.tags %} {{ msg.tags }} {% endif%}">
+		<i class = "close icon"></i>
+		{{ msg|safe }}
+	</div>
+	{% endfor %}
+{% endif %}
+

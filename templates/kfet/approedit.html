@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = {% url 'approedit' id_appro=instance %}>
+			<h2 class = "ui inverted blue block header">Modifier une appro</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "num_facture">Numéro de la facture</label>
+				<div class = "ui selection dropdown">
+					{{ form.num_facture }}
+					<i class = "dropdown icon"></i>
+					<div class = "default text">Facture</div>
+					<div class = "menu">
+						{% for facture in liste_factures %}
+							<div class = "item">{ facture }</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<div class = "ui calendar" id = "appro_calendar">
+					<label for = "date"><b>Date</b></label>
+					<div class = "ui left labeled icon input">
+						<i class = "calendar alternate outline icon"></i>
+						{{ form.date }} 
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "product_price">Prix</label>
+				<div class = "ui left labeled icon input">
+					{{ form.product_price }}
+					<i class ="euro icon"></i>
+				</div>
+			</div>
+
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

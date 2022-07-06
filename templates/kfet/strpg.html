@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui two column center aligned grid">
+	<div class = "row">
+	<div class = "column">
+		<div class = "ui segment">
+		<h3 class = "ui inverted blue block center header">Je dois de l'argent à...</h3>
+		{% if todolist %}
+			<table class = "ui celled table">
+			<thead>
+			<tr>
+				<th class = "center aligned single line">La demande est faite par...</th>
+				<th class = "center aligned single line">Montant</th>
+				<th class = "center aligned single line">Description</th>
+				<th class = "center aligned single line">Validation</th>
+			<tr>
+			</thead>			
+			{% for i in todolist %}
+			<form method="POST" action = "{% url "kfet.views.summarytrpg" %}">
+				{% csrf_token %}
+				<tr>
+					{% for j in i %}
+						<td class = "center aligned single line">{{ j }}</td>
+					{% endfor %}
+				<td class = "center aligned single line">
+				<button class = "ui center blue submit button" type = "submit" name = "idnbr" value = "{{ forloop.counter0 }}">Accepter !</button></td>
+				</tr>
+					
+				</tr>
+			</form>
+			{% endfor %}
+			<p></p>
+			</table>
+		{% else %}
+			<p></p>
+			Personne ! Je suis bel'eff
+		{% endif %}
+		</div>
+	</div></div>
+	<div class = "row">
+	<div class = "column">
+		<div class = "ui segment">
+		<h3 class = "ui inverted blue block center header">J'ai demandé de l'argent à...</h3>
+			{% if donelist %}
+				
+				<table class = "ui celled aligned padded table">
+				<thead>
+				<tr>
+					<th class = "center aligned single line">J'ai demandé à ...</th>
+					<th class = "center aligned single line">Montant</th>
+					<th class = "center aligned single line">Description</th>
+					<th class = "center aligned single line">Date de la demande</th>
+				<tr>
+				</thead>
+			{% for i in donelist %}
+				<tr>
+					{% for j in i %}
+						<td class = "center aligned single line">{{ j }}</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+			</table>
+			Pour en ajouter, clique <a href = "{% url "kfet.views.addtrpg" %}">ici</a>
+			{% else %}
+				Personne ! Pour en ajouter, clique <a href = "{% url "kfet.views.addtrpg" %}">ici</a>
+			{% endif %}
+		</div>
+	</div>
+	</div>
+</div>
+{% endblock %}

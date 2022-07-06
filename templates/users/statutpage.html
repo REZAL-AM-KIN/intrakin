@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class = "ui center aligned grid">
+	<div class = "height wide column">	
+		<div class = "row">
+			<div class = "column">
+				<div class="ui three top attached steps">
+					<div class="step">
+						<i class="green checkmark icon"></i>
+						<div class="content">
+							<div class="title">Inscription</div>
+    						<div class="description">Enregistrement sur le site</div>
+    					</div>
+    				 </div>
+    				 
+    		{% if user.is_active and not gadz.has_rezal %}
+    				<div class="active step">
+						<i class="refresh icon"></i>
+						<div class="content">
+							<div class="title">Vérification</div>
+    						<div class="description">Validation du compte par nos équipes</div>
+    					</div>
+    				</div>
+    				 
+    				<div class="disabled step">
+						<i class="exchange icon"></i>
+						<div class="content">
+							<div class="title">Connexion</div>
+    						<div class="description">Configuration des appareils</div>
+    					</div>
+    				</div>
+				</div>
+				<div class="ui attached segment">
+					<p>Félicitation, vous êtes maintenant enregistré sur notre base de données !</p>
+					<p>Nos équipes vont activer votre compte dans les heures à venir. Merci de patienter.</p>
+					<p>Pour plus d'informations, consultez la documentation sur <a href="http://confluence.rezal.fr">Confluence</a>.</p>
+				</div>
+				
+			{% elif user.is_active and gadz.has_rezal and verif == "KO" %}
+					<div class="step">
+						<i class="green checkmark icon"></i>
+						<div class="content">
+							<div class="title">Vérification</div>
+    						<div class="description">Validation du compte par nos équipes</div>
+    					</div>
+    				</div>
+    				 
+    				<div class="active step">
+						<i class="exchange icon"></i>
+						<div class="content">
+							<div class="title">Connexion</div>
+    						<div class="description">Configuration des appareils</div>
+    					</div>
+    				</div>
+				</div>
+				<div class="ui attached segment">
+					<p>Bravo, votre compte a été approuvé !</p>
+					<p>Vous pouvez maintenant ajouter des appareils à votre compte sur la page de <a href ="{% url "showmac" %}">gestion des connexions</a>.</p>
+					<p>Pour plus d'informations, consultez la documentation sur <a href="http://confluence.rezal.fr">Confluence</a>.</p>
+				</div>
+
+			{% elif user.is_active and gadz.has_rezal and verif == "OK" %}
+					<div class="step">
+						<i class="green checkmark icon"></i>
+						<div class="content">
+							<div class="title">Vérification</div>
+    						<div class="description">Validation du compte par nos équipes</div>
+    					</div>
+    				</div>
+    				 
+    				<div class="step">
+						<i class="green checkmark icon"></i>
+						<div class="content">
+							<div class="title">Connexion</div>
+    						<div class="description">Configuration des appareils</div>
+    					</div>
+    				</div>
+				</div>
+				<div class="ui attached segment">
+					<p>Au moins un appareil est associé à votre compte !</p>
+					<p>Votre accès internet est opérationnel.</p>
+					<p>Les prochains appareils nécessiteront une approbation par nos équipes.</p>
+					<p>Pour plus d'informations, consultez la documentation sur <a href="http://confluence.rezal.fr">Confluence</a>.</p>
+				</div>
+				
+				<div class="ui center aligned segment">
+					<p>Pour retourner à l'accueil, cliquez <a href = "{% url "index" %}">ici</a>.</p>
+				</div>
+			
+			{% endif %}
+			
+			</div>
+		</div>	
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

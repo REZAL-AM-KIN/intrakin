@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.gestionappros" %}">
+			<h2 class = "ui inverted blue block header">Ajouter une appro</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "num_facture">Numéro de la facture</label>
+				<div class = "ui left labeled icon input">
+					<input name = "num_facture" id = "num_facture" type = "text">
+					<i class = "file alternate outline icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "entity">Institution/Boquette Associée</label>
+				<div class = "ui selection dropdown">
+					<input name = "entity" id = "entity" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Institution/Boquette</div>
+				    <div class = "menu">
+				    	{% for entite in liste_entites %}
+				    		{% if request.user|has_group:entite %}
+								<div class = "item">{{ entite }}</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<div class = "ui calendar" id = "appro_calendar">
+					<label for = "date"><b>Date</b></label>
+					<div class = "ui left labeled icon input">
+						<i class = "calendar alternate outline icon"></i>
+						<input name = "date" type = "text" placeholder = "Date"> 
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "product">Nom du produit</label>
+				<div class = "ui item search prod">
+				<div class = "ui icon input">
+					<input name = "product" class = "prompt" id = "prod" type = "text" placeholder  = "Search ... (Alt+P)" autofocus>
+					<i class = "search icon button"></i>
+				</div>
+				<div class = "results"></div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "product_price">Prix</label>
+				<div class = "ui left labeled icon input">
+					<input name = "product_price" id = "product_price" type = "text" placeholder = "Prix d'achat à l'unité - Exemple : 7.2">
+					<i class ="euro icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "quantity">Stock</label>
+				<div class = "ui left labeled icon input">
+					<input name = "quantity" id = "quantity" type = "text">
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+<div class = "ui center aligned grid">
+	<div class = "height wide column">	
+	<div class = "row">
+	<div class = "column">
+		<div class = "ui segment">
+		<h3 class = "ui inverted blue block center header">Liste des appros</h3>
+		{% if listappro %}
+			<table class = "ui celled table">
+			<thead>
+			<tr>
+				<th class = "center aligned single line">Numéro de facture</th>
+				<th class = "center aligned single line">Date</th>
+				<th class = "center aligned single line">Nom du produit</th>
+				<th class = "center aligned single line">Prix du produit</th>
+				<th class = "center aligned single line">Quantité achetée</th>
+				<th class = "center aligned single line">Actif</th>
+				<th class = "center aligned single line">Edition</th>
+			</tr>
+			</thead>			
+			{% for i in listappro %}
+			<form method="POST" action = "{% url "kfet.views.gestionappros" %}">
+				{% csrf_token %}
+				<tr>
+					{% for j in i %}
+						{% if forloop.last %}
+							<td class = "center aligned single line">
+							{% if j == 1 %}
+								<button class="ui icon button" type = "submit" name = "disable" value = "{{ i.0 }}">
+									<i class= "large green checkmark icon"></i></button>
+								</td>
+							{% else %}
+								<button class="ui icon button" type = "submit" name = "enable" value = "{{ i.0 }}">
+									<i class= "large red times circle icon"></i></button>
+								</td>
+							{% endif %}
+						{% else %}
+							<td class = "center aligned single line">{{ j }}</td>
+						{% endif %}
+					{% endfor %}
+				<td class = "center aligned single line">
+				<button class = "ui center blue submit button" type = "submit" name = "edit_appro" value = "{{ forloop.counter0 }}">Editer</button></td>
+				</tr>
+			</form>
+			{% endfor %}
+			<p></p>
+			</table>
+		{% else %}
+			<p></p>
+			Vide !
+		{% endif %}
+		</div>
+	</div></div>
+	</div>
+</div>
+{% endblock %}

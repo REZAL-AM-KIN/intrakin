@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+
+	
+	<!--TOUS LES PRODUITS-->
+			<h4 class="ui horizontal divider header">
+				<i class="cocktail icon"></i>
+				Tous les produits
+			</h4>
+			<div class="ui fluid center aligned segment">
+				<form class = "ui form" method="POST" action = "{% url "elec.views.entree_sortie_matos" %}" %}>
+					<div class="ui large fluid search selection dropdown" id="search-select">
+						<input type="hidden" name="item_id" id = "item_id">
+						<i class="dropdown icon"></i>
+						<div class="default text">Rechercher ou scanner un produit ...</div>
+						<div class="menu">
+							{% for item in list_items %}
+								<div class="item" data-value='{{ item.0 }}'>{{ item.1 }} / {{ item.2 }} / {{ item.3 }}</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class = "field">
+						<label for = "price">Quantité</label>
+						<div class = "ui left labeled icon input">
+						<input name = "quantity" id = "quantity" type = "text" value="1">
+						<i class = "shopping cart icon"></i>
+						</div>
+					</div>
+					</br>
+					</br>
+
+					<input type="button" class="ui fluid positive huge button" onclick="add_item_to_list()" value="Ajouter ces items">
+					{% csrf_token %}
+				</form>
+				
+				<form id ="master_form" class = "ui form" action = "{% url "elec.views.entree_sortie_matos" %}" method = "post">
+		{% csrf_token %}
+		<input name = "items" class = "prompt" id = "items" type = "hidden" value = "" autofocus>
+		<div class = "one field">
+			<div class="ui celled list" id="itemlist">
+				<div class="item"><b>Produits selectionnés :</b></div>
+			</div>
+		</div>
+		<input type = "button" class = "ui center blue button" onclick = "send_data()" value="Valider"/>
+	</form>
+				</br>
+				<table class = "ui celled table">
+					<thead>
+						<tr>
+							<th class = "center aligned single line">Nom</th>
+							<th class = "center aligned single line">Marque</th>
+							<th class = "center aligned single line">Ref</th>
+							<th class = "center aligned single line">Quantité</th>
+						</tr>
+					</thead>
+					{% for i in items_to_manage_display %}
+					<tr>
+						{% for j in i %}
+							{% if forloop.first %}
+							{% else %}
+								<td class = "center aligned single line">{{ j }}</td>
+							{% endif %}
+						{% endfor %}
+						<td class = "center aligned single line">
+						<button class = "ui center blue submit button" type = "submit" name = "delete_item_from_list" value = "{{ forloop.counter0 }}">Supprimer</button></td>
+					{% endfor %}
+				</table>
+			</div>
+	
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "elec.views.entree_sortie_matos" %}" %}>
+			<h2 class = "ui inverted blue block header">Infos de l'entrée / sortie</h2>
+			{% csrf_token %}
+			<div class = "field">
+						<label for = "price">Nom</label>
+						<div class = "ui left labeled icon input">
+						<input name = "quantity" id = "quantity" type = "text">
+						<i class = "shopping cart icon"></i>
+					</div>
+			</div>
+			
+			
+			<div class = "field">
+				<label for = "entity">Lieu actuel</label>
+				<div class = "ui selection dropdown">
+					<input name = "from_place" id = "from_place" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Choisir un local</div>
+				    <div class = "menu">
+				    	{% for local in liste_locaux %}
+								<div class = "item">{{ local }}</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "entity">Destination</label>
+				<div class = "ui selection dropdown">
+					<input name = "to_place" id = "to_place" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Choisir un local</div>
+				    <div class = "menu">
+				    	{% for local in liste_locaux %}
+								<div class = "item">{{ local }}</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer l'opération</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

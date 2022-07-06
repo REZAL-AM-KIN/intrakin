@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = {% url 'itemedit' id_item=instance %}>
+			<h2 class = "ui inverted blue block header">Modifier un produit</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom</label>
+				<div class = "ui left labeled icon input" placeholder="Read Only">
+					{{ form.name }}
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+
+			<div class = "field">
+				<label for = "brand">Marque</label>
+				<div class = "ui left labeled icon input">
+					{{ form.brand }}
+					<i class = "industry icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "associated_kind">Type</label>
+				<div class = "ui left labeled icon input">
+					{{ form.associated_kind }}
+					<i class = "keyboard icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "usual_stockage">Stockage habituel</label>
+				<div class = "ui left labeled icon input">
+					{{ form.usual_stockage }}
+					<i class = "map marker alternate icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "usual_stockage">Stockage actuel</label>
+				<div class = "ui left labeled icon input">
+					{{ form.current_place }}
+					<i class = "map marker alternate icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "ref">Type</label>
+				<div class = "ui left labeled icon input">
+					{{ form.ref }}
+					<i class = "tags icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "quantity">Quantité</label>
+				<div class = "ui left labeled icon input">
+					{{ form.quantity }}
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "brand">Prix d'achat</label>
+				<div class = "ui left labeled icon input">
+					{{ form.purchase_value }}
+					<i class = "euro icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "purchase_date">Date d'achat</label>
+				<div class = "ui left labeled icon input" placeholder="Read Only">
+					{{ form.purchase_date }}
+					<i class = "calendar alternate icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "comment">Commentaire</label>
+				<div class = "ui left labeled icon input">
+					{{ form.comment }}
+					<i class = "pencil alternate icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "state">Etat</label>
+				<div class = "ui left labeled icon input">
+					{{ form.state }}
+					<i class = "ambulance icon"></i>
+				</div>
+			</div>
+
+<!--			
+			<div class = "field">
+				<label for = "stock">Favoris test</label>
+				<div class = "ui inline dropdown">
+					<i class ="dropdown icon"></i>
+					<div class = "text">{{ form.favorite }}</div>
+					{{ form.favorite }}
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+					<label for = "enable">Produit disponible ?</label>
+				<div class = "ui inline dropdown">
+					<input name = "enable" id = "enable" type = "hidden">
+					<i class ="dropdown icon"></i>
+					{% if info_enable %}
+								<div class = "text">Oui</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=1>Oui</div>
+							    	<div class = "item" data-value=0>Non</div>
+								</div>
+					{% else %}
+								<div class = "text">Non</div>
+							    <div class = "menu">
+							    	<div class = "item" data-value=1>Oui</div>
+							    	<div class = "item active selected" data-value=0>Non</div>
+								</div>
+					{% endif %}
+					</div>
+			</div>
+	    		<div class = "field">
+						<label for = "favorite">Produit favori ?</label>
+					<div class = "ui inline dropdown">
+						<input name = "favorite" id = "favorite" type = "hidden">
+						<i class ="dropdown icon"></i>
+						{% if info_favorite %}
+								<div class = "text" data-value=1>Oui</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=1>Oui</div>
+							    	<div class = "item" data-value=0>Non</div>
+								</div>
+						{% else %}
+								<div class = "text" data-value=0>Non</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=0>Non</div>
+							    	<div class = "item" data-value=1>Oui</div>
+						
+						{% endif %}
+					</div>
+
+    		</div>
+-->			
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

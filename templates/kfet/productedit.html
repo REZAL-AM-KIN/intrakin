@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = {% url 'productedit' id_product=instance %}>
+			<h2 class = "ui inverted blue block header">Modifier un produit</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom du produit</label>
+				<div class = "ui left labeled icon input" placeholder="Read Only">
+					{{ form.name }}
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+
+			<div class = "field">
+				<label for = "price">Prix</label>
+				<div class = "ui left labeled icon input">
+					{{ form.price }}
+					<i class = "euro icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "shortcut">Raccourci</label>
+				<div class = "ui left labeled icon input">
+					{{ form.shortcut }}
+					<i class = "keyboard icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "stock">Stock</label>
+				<div class = "ui left labeled icon input">
+					{{ form.stock }}
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+
+<!--			
+			<div class = "field">
+				<label for = "stock">Favoris test</label>
+				<div class = "ui inline dropdown">
+					<i class ="dropdown icon"></i>
+					<div class = "text">{{ form.favorite }}</div>
+					{{ form.favorite }}
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			
+			<div class = "field">
+					<label for = "enable">Produit disponible ?</label>
+				<div class = "ui inline dropdown">
+					<input name = "enable" id = "enable" type = "hidden">
+					<i class ="dropdown icon"></i>
+					{% if info_enable %}
+								<div class = "text">Oui</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=1>Oui</div>
+							    	<div class = "item" data-value=0>Non</div>
+								</div>
+					{% else %}
+								<div class = "text">Non</div>
+							    <div class = "menu">
+							    	<div class = "item" data-value=1>Oui</div>
+							    	<div class = "item active selected" data-value=0>Non</div>
+								</div>
+					{% endif %}
+					</div>
+			</div>
+	    		<div class = "field">
+						<label for = "favorite">Produit favori ?</label>
+					<div class = "ui inline dropdown">
+						<input name = "favorite" id = "favorite" type = "hidden">
+						<i class ="dropdown icon"></i>
+						{% if info_favorite %}
+								<div class = "text" data-value=1>Oui</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=1>Oui</div>
+							    	<div class = "item" data-value=0>Non</div>
+								</div>
+						{% else %}
+								<div class = "text" data-value=0>Non</div>
+							    <div class = "menu">
+							    	<div class = "item active selected" data-value=0>Non</div>
+							    	<div class = "item" data-value=1>Oui</div>
+						
+						{% endif %}
+					</div>
+
+    		</div>
+-->			
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

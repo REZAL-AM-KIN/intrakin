@@ -1,0 +1,106 @@
+{% load extra_filters %}
+
+<div class = "ui inverted grid small menu">
+
+	<a class = "item link" href = "{% url "users.views.index" %}">
+		<i class = "home icon"></i>
+		Accueil
+	</a>
+	
+	{% if user.is_superuser %}
+		<a class = "item link" href = "/admin">
+			<i class = "configure icon"></i>
+			Admin Django
+		</a>
+		<a class = "item link" href = "{% url "admincontrols" %}">
+			<i class = "users icon"></i>
+			Outils admins
+		</a>
+		<a class = "item link" href = "{% url "macapprobation" %}">
+			<i class = "checkmark icon"></i>
+			Approbation MAC
+		</a>
+		<a class = "item link" href = "{% url "macdeletion" %}">
+			<i class = "trash alternate icon"></i>
+			Suppression MAC
+		</a>
+	{% endif %}
+	
+	<a class = "item link" href = "http://confluence.rezal.fr">
+		<i class = "book icon"></i>
+		<b>AIDE</b>
+	</a>
+	
+	<a class = "item link" href = "{% url "users.views.about" %}">
+		<i class = "inverted info circle icon"></i>
+		A propos
+	</a>
+	
+	{% with request|get_client_ip as ip %} <!--appel la fonction 'get_client_ip' avec comme variable d'entrée 'request' et stock la variable de sortie (l'ip du client) dans la variable 'ip'-->
+	{% if gadz.is_gadz %}
+	{% if "172.20." in ip %}
+	<a class = "item link" href = "http://helios.kin">
+		<i class = "cloud download icon"></i>
+		Helios.kin
+	</a>
+	{% else %}
+	<a class = "item link" href = "http://www.google.fr">
+		<i class = "google icon"></i>
+		Google
+	</a>
+	{% endif %}
+	{% endif %}
+	{% endwith %}<!--fin de l'existance de la variable 'ip'-->
+	
+	<div class="right menu">
+	{% if user.is_authenticated %}
+	{% block navbar_menu %}
+	<div class = "ui item top right pointing dropdown">
+		<i class = "user icon"></i>Bienvenue {{ user.username }} !
+		<i class = "dropdown icon"></i>
+		<div class = "menu">	
+			<a class = "item" href = "{% url "settings" %}">
+			<i class = "settings icon"></i>		
+			Paramètres du compte
+			</a>
+			{% if gadz.has_rezal %}
+			<a class = "item" href = "{% url "showmac" %}">
+			<i class = "exchange icon"></i>
+			Paramètres de connexion
+			</a>
+			{% endif %}
+			<a class = "item" href = "{% url "sign-out" %}?next={{ request.path | urlencode }}">
+			<i class = "sign out icon"></i>
+			Déconnexion
+			</a>
+		</div>
+	</div>
+	{% endblock %}
+	{% else %}
+	<a class = "item link" href = "{% url "inscription" %}">
+		<i class = "user icon"></i>
+		Inscription
+	</a>
+	<a class = "item link" href = "{% url "password_reset" %}">
+		<i class = "unlock icon"></i>
+		Mot de passe oublié ?
+	</a>
+	<a class = "item link" href = "{% url "users.views.loginPage" %}">
+		<i class = "sign in icon"></i>
+		Connexion
+	</a>
+	{% endif %}
+	</div>
+	{% if gadz.is_debucquable %}
+		{% include "navbar_kfet_new.html" %}
+	{% endif %}
+	
+</div>
+{% if messages %}
+	{% for msg in messages %}
+		<div class = "ui floating message {% if msg.tags %} {{ msg.tags }} {% endif%}">
+			<i class = "close icon"></i>
+				{{ msg|safe }}
+			</div>
+	{% endfor %}
+{% endif %}

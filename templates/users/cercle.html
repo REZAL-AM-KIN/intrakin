@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Informations sur le cercles des élèves des Arts et Métiers d'Aix en Provence</title>
+  <link rel="stylesheet" href="accueil.css">
+<style>
+  .titre{
+    text-align:center;
+    font-family:sans-serif;
+    color: grey;
+  }
+
+
+  .card{
+  width:50%;
+  position: absolute;
+  top:22%;
+  left:25%;
+  height:56%;
+
+  border-radius: 20px;
+  box-shadow: 7px 4px 25px 0px rgba(0,0,0,0.34);
+  }
+
+  .info{
+  font-family: sans-serif;
+  font-size: 0.8em;
+  color: grey;
+  padding-top: 40px;
+  width: 70%;
+  left: 15%;
+  height: 22%;
+  top:78%;
+  position:absolute;
+
+  }
+
+  .logo{
+  border-radius: 50px;
+  height: 16%;
+  top:3%;
+  left:3%;
+  position: absolute;
+  }
+
+  .infos {
+  margin:20px;
+  text-align: center;
+  font-family:sans-serif;
+  }
+
+  .icon{
+    position: relative;
+    width: 50%;
+    left: 10%
+  }
+
+
+  .ligne {
+    width: 80%;
+    left: 10%;
+    height: 30px;
+
+  }
+
+
+
+
+</style>
+{% load static %}
+</head>
+<body>
+  <img class='logo' src="{% static "images/cercle/UE.jpg" %}">
+  <div class='card'>
+  <h1 class='titre'>Cercle des élèves</h1>
+  <div class="infos">
+<p> Le cerle des élèves est l'association qui regroupe les élèves de l'école nationale supérieure d'Arts et Métiers d'Aix-en-Provence. </p>
+    </div>
+    <table style="width: 80%;left:10%;position:absolute">
+    <tbody>
+    <tr class="ligne">
+    <td style="width: 10%;"><img class='icon'  src="{% static "images/cercle/user.png" %}" ></td>
+    <td style="width: 89.8525%;font-family:sans-serif"> + de 300 élèves membres</td>
+    </tr>
+    <tr class="ligne">
+    <td style="width: 10%;font-family:sans-serif"><img class='icon' src="{% static "images/cercle/facebook.png" %}"></td>
+    <td style="width: 89.8525%;"><a style="text-decoration: none;color: mediumblue;font-family: sans-serif;"href="https://www.facebook.com/CercleElevesAMAix"> Page facebook</a></td>
+    </tr>
+    <tr class="ligne">
+    <td style="width: 10%;font-family:sans-serif"><img class='icon' src="{% static "images/cercle/pin.png" %}"></td>
+    <td style="width: 89.8525%;"><a style="text-decoration: none;color: black;font-family: sans-serif;"href="https://goo.gl/maps/9rLa86t7mwAKGm3j9">19 rue du RICM Aix-en-Provence</a></td>
+    </tr>
+    <tr class="ligne">
+    <td style="width: 10%;font-family:sans-serif"><img class='icon' src="{% static "images/cercle/mail.png" %}"></td>
+    <td style="width: 89.8525%;"><a style="text-decoration: none;color: black;font-family: sans-serif;" href="mailto:communication.aix@ueam.org">communication.aix@ueam.org</a></td>
+    </tr>
+    </tbody>
+    </table>
+
+  </div>
+  <div class="info">
+    <p style="text-align:center"> Site web de l'association CERCLE DES ELEVES DE L ECOLE NATIONALE SUPERIEURE D'ARTS ET METIERS D 'AIX EN PROVENCE </p>
+    <p style="text-align:center"> Le nom de domaine "rezal.fr" appartient exclusivement à cette association</p>
+  </div>
+</body>
+</html>

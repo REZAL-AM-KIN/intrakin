@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned one column grid">
+	<div class = "height wide column">
+	<div class = "ui raised compte segment">
+		<h2 class = "ui inverted blue block header">MAC(s) actuellement autorisée(s) pour l'utilisateur {{ user.username}}</h2>
+		{% if listmac %}
+		<table class = "ui celled padded table">
+			<thead>
+			<tr>
+				<th class = "center aligned single line">Nom de l'appareil</th>
+				<th class = "center aligned single line">Adresse MAC</th>
+				<th class = "center aligned single line">Statut</th>
+				<th class = "center aligned single line">Supprimer</th>
+			<tr>
+			</thead>
+			{% for i in listmac %}
+			<form method="POST" action = "{% url "users.views.show_mac" %}">
+				{% csrf_token %}
+				<tr>
+					{% for j in i|slice:":-1" %}
+						<td class = "center aligned single line">{{ j }}</td>
+					{% endfor %}
+					{% if i|last == 1 %}
+						<td class="center aligned">
+        					<i class="large green checkmark icon"></i>
+      					</td>
+      				{% else %}
+      					<td class="center aligned">
+        					<i class="large red close icon"></i>
+      					</td>
+      				{% endif %}
+							<td class = "center aligned single line">
+							<button class = "ui center red submit button" type = "submit" name = "mac_nbr" value = "{{ forloop.counter0 }}">Supprimer</button></td>
+				</tr>
+			</form>
+			{% endfor %}
+		</table>
+		{% else %}
+		<p></p>
+		Pas d'adresse enregistrée pour l'instant
+		{% endif %}
+	</div>
+	<div class = "ui raised compte segment">
+		Pour ajouter des appareils à ton compte, rends toi sur <a href = "{% url "addmac" %}">cette page</a>
+	</div>
+</div>
+{% endblock %}

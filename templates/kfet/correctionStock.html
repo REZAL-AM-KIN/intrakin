@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.corrStock" %}">
+			<h2 class = "ui inverted blue block header">Corriger un stock</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom du produit (stock actuel)</label>
+				<div class = "ui item search prod">
+				<div class = "ui icon input">
+					<input name = "name" class = "prompt" id = "name" type = "text" placeholder  = "Search ... (Alt+P)" autofocus>
+					<i class = "search icon button"></i>
+				</div>
+				<div class = "results"></div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "varstock">Variation de stock</label>
+				<div class = "ui left labeled icon input">
+					<input name = "varstock" id = "varstock" value=0 step=1 type = "number">
+					<i class = "shopping basket icon"></i>
+				</div>
+			</div>
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

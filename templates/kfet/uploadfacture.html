@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.uploadfacture" %}" enctype="multipart/form-data">
+			<h2 class = "ui inverted blue block header">Rentrer une facture</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "titre">Titre de la facture</label>
+				<div class = "ui left labeled icon input">
+					<input name = "titre" id = "titre" type = "text">
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<div class = "field"> <!--Pour chaque nouveau champ-->
+				<div class="ui calendar" id="facture_calendar">
+					<label for = "calendrier"><b>Date de la facture</b></label>
+					<div class = "ui left labeled icon input">
+						<i class="calendar icon"></i> <!--Pour le choix de la petite icone à droite du champ-->
+						<input name = "date_facture" type="text" placeholder="Date/Heure">
+					</div>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "price">Montant</label>
+				<div class = "ui left labeled icon input">
+					<input name = "price" id = "price" type = "text" placeholder = "Exemple : 5.3">
+					<i class = "euro icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+					<label for = "entity">Boquette associée</label> 
+					<div class = "ui selection dropdown"> <!--Liste déroulante-->
+						<input name = "associated_entity" id = "entity" type = "hidden"> <!--Ici, on indique dans le nom du champ, le nom de la variable que l'on va récuperer pour l'esploiter dans le python-->
+						<i class ="dropdown icon"></i> 
+						<div class = "default text">Institution/Boquette</div> 
+						<div class = "menu">
+							{% for entite in liste_entites %} <!--Permet de faire de sorte à ce que la liste soit adaptée au différents boquettes auxquelles l'utilisateur possède les autorisation-->
+								{% if request.user|has_group:entite %} <!--Vérification des autorisations utilisateur-->
+									<div class = "item">{{ entite }}</div>
+								{% endif %} <!--il n'y a pas d'indentation en HTML, donc les fins de si et de for sont obligatoires != python -->
+							{% endfor %} 
+						</div>
+					</div>
+			</div>
+			
+			<div class = "field">
+				<label for = "stock">Facture à uploader</label>
+				<div class = "ui left labeled icon input">
+					{{ form.document }}
+					<i class = "upload icon"></i>
+				</div>
+			</div>
+		
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

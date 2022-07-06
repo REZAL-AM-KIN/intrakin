@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = "{% url "kfet.views.fournisseurs" %}">
+			<h2 class = "ui inverted blue block header">Ajouter un fournisseur</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom</label>
+				<div class = "ui left labeled icon input">
+					<input name = "name" id = "name" type = "text">
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "tel">Num'sss de blairal</label>
+				<div class = "ui left labeled icon input">
+					<input name = "tel" id = "tel" type = "text">
+					<i class ="phone volume icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "adress">Adresse</label>
+				<div class = "ui left labeled icon input">
+					<input name = "adress" id = "adress" type = "text">
+					<i class = "map marker alternate icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "mail">Adresse mail</label>
+				<div class = "ui left labeled icon input">
+					<input name = "mail" id = "mail" type = "text">
+					<i class = "envelope outline icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "remark">Remarques</label>
+				<div class = "ui left labeled icon input">
+					<input name = "remark" id = "remark" type = "text">
+					<i class = "pencil alternate icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "entity">Institution/Boquette Associée</label>
+				<div class = "ui selection dropdown">
+					<input name = "entity" id = "entity" type = "hidden">
+					<i class ="dropdown icon"></i>
+					<div class = "default text">Institution/Boquette</div>
+				    <div class = "menu">
+				    	{% for entite in liste_entites %}
+				    		{% if request.user|has_group:entite %}
+								<div class = "item">{{ entite }}</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+<div class = "ui center aligned grid">
+	<div class = "height wide column">	
+	<div class = "row">
+	<div class = "column">
+		<div class = "ui segment">
+		<h3 class = "ui inverted blue block center header">Liste des fournisseurs</h3>
+		{% if listfournisseur %}
+			<table class = "ui celled table">
+			<thead>
+			<tr>
+				<th class = "center aligned single line">Nom</th>
+				<th class = "center aligned single line">Téléphone</th>
+				<th class = "center aligned single line">Adresse</th>
+				<th class = "center aligned single line">Mail</th>
+				<th class = "center aligned single line">Remarque</th>
+				<th class = "center aligned single line">Edition</th>
+				<th class = "center aligned single line">Suppression</th>
+			</tr>
+			</thead>			
+			{% for fournisseur in listfournisseur %}
+			<form method="POST" action = "{% url "kfet.views.fournisseurs" %}">
+				{% csrf_token %}
+				<tr>
+				{% for elt in fournisseur %}
+				<td class = "center aligned">{{ elt }}</td>
+				{% endfor %}
+				<td class = "center aligned">
+				<button class = "ui center blue submit button" type = "submit" name = "edit_fournisseur" value = "{{ forloop.counter0 }}">Editer</button></td>
+				<td class = "center aligned">
+				<button class = "ui center blue submit button" type = "submit" name = "delete_fournisseur" value = "{{ forloop.counter0 }}">Supprimer</button></td>
+				</tr>
+			</form>
+			{% endfor %}
+			<p></p>
+			</table>
+		{% else %}
+			<p></p>
+			Vide !
+		{% endif %}
+		</div>
+	</div></div>
+	</div>
+</div>
+{% endblock %}

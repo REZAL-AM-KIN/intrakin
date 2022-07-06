@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class = "ui center aligned grid">
+	<div class = "height wide column">
+	<div class = "ui segment">
+		<form class = "ui form" method="POST" action = {% url 'fournisseuredit' id_fournisseur=instance %}>
+			<h2 class = "ui inverted blue block header">Modifier un fournisseur</h2>
+			{% csrf_token %}
+			<div class = "field">
+				<label for = "name">Nom</label>
+				<div class = "ui left labeled icon input">
+					{{ form.name }}
+					<i class = "tag icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "tel">Num'sss de blairal</label>
+				<div class = "ui left labeled icon input">
+					{{ form.tel }}
+					<i class ="phone volume icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "adress">Adresse</label>
+				<div class = "ui left labeled icon input">
+					{{ form.adress }}
+					<i class = "map marker alternate icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "mail">Adresse mail</label>
+				<div class = "ui left labeled icon input">
+					{{ form.mail }}
+					<i class = "envelope outline icon"></i>
+				</div>
+			</div>
+			<div class = "field">
+				<label for = "remark">Remarques</label>
+				<div class = "ui left labeled icon input">
+					{{ form.remark }}
+					<i class = "pencil alternate icon"></i>
+				</div>
+			</div>
+			<p></p>
+			<button class = "ui center blue submit button" type = "submit" value = "Submit">Enregistrer</button>
+		</form>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

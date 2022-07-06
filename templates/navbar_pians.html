@@ -1,0 +1,52 @@
+{% load extra_filters %}
+<div class="ui center aligned padded stackable grid">
+  <div class="center aligned black row">
+	  <div class="ten wide segment column">
+	  	<form action = "{% url "kfet.views.homePians" %}" method = "get">
+			<div class="ui large fluid search selection dropdown" id="search-select">
+				<input type="hidden" name="pg" id = "pg">
+				<i class="dropdown icon"></i>
+				<div class="default text">Rechercher un PG ... (Alt+P)</div>
+				<div class="menu">
+					{% for pg_debucquable in list_pg_debucquable %}
+						<div class="item">{{ pg_debucquable }}</div>
+					{% endfor %}
+				</div>
+			</div>
+			{% if user.is_authenticated %}
+				<input name = "entity", type = "hidden" value="{{entity}}">
+			{% endif %}
+			{% csrf_token %}
+		</form>
+	  </div>
+	  {% if user.is_authenticated %}
+		  <div class="two wide segment column">
+			  <div class = "ui large fluid selection dropdown">
+			  	<input type="hidden" name="entity" id = "entity">
+				<div style="text-transform: uppercase"><i class = "tag icon"></i>  {{ entity }}</div>
+				<i class = "dropdown icon"></i>
+				<div class = "menu">
+					{% for entite in user_entity %}	
+						<a class = "item" href = "{% url "kfet.views.homePians" %}?entity={{entite.name}}{%if pg%}&pg={{pg}}{%endif%}" style="text-transform: uppercase">
+						{{ entite.name }}
+						</a>
+					{% endfor %}
+				</div>
+		      </div>
+		  </div>
+	  {% endif %}
+	  <div class="four wide segment column">
+	  	{% if user.is_authenticated %}
+			<div class="ui large fluid blue button" onclick = "location.href = '{% url "sign-out" %}?next={{ request.get_full_path | urlencode }}'">
+				<i class = "sign out icon"></i>
+				Déconnecter {{ user.username }}
+			</div>
+			{% else %}
+			<div class = "ui large fluid blue button" onclick = "location.href = '{% url "users.views.loginPagePians" %}'">
+				<i class = "sign in icon"></i>
+				Connexion
+			</div>
+		{% endif %}
+	  </div>
+  </div>
+</div>

@@ -1,0 +1,200 @@
+{% load staticfiles %}
+{% load static %}
+{% load extra_filters %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
+		<title>{% block title %}AM REZAL KIN{% endblock %}</title>
+		<link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+		<link rel = "stylesheet" href = "{% static "css/semantic.css" %}"/>
+		<link rel = "stylesheet" href = "{% static "css/calendar.css" %}"/>
+	</head>
+	
+	<body {% block bodystyle %}{% endblock %}>
+		
+		{% if request.path == "/cvisPians/" or request.path == "/logincPians/" %}
+			{% include "navbar_cpians.html" %}
+		{% elif request.path == "/homePians/" or request.path == "/loginPians/" %}
+			{% include "navbar_pians.html" %}
+		{% else %}
+			{% include "navbar_user_new.html" %}
+			{% if request.user|has_group:"elec" %}
+				{% include "navbar_elec.html" %}
+			{% endif %}
+			
+		{% endif %}
+		
+		{% block body %}
+		{% endblock %}
+
+	</body>
+
+	<footer>
+		<script src = "{% static "javascript/jquery-3.2.1.js" %}" type = "text/javascript"></script>
+		<script src = "{% static "javascript/semantic.js" %}" type = "text/javascript"></script>
+		<script src = "{% static "javascript/calendar.js" %}" type = "text/javascript"></script>
+		
+		<script type = "text/javascript">
+			$(document).ready(function() {
+				$('.sub.login').hide();
+				$('.message .close').on('click', function() {
+					$(this).closest('.message').fadeOut();
+					});
+				$('.link.login').click(function() {
+					$('.link.login').hide().end().find('sub.login').slideDown();
+					});
+				$('#pians-msg').transition('flash');
+			});
+		</script>
+		
+		<script type = "text/javascript">
+			$('.ui.search.pg').search( {
+				selectFirstResult: true,
+				searchOnFocus: false,
+				apiSettings : {
+					url: '{% url "kfet.views.getPgs" %}?pg={query}'
+				},
+				debug: false,
+				verbose: true
+			})
+			$('.ui.dropdown').dropdown();
+			$('#search-select').dropdown({
+				minCharacters: 1,
+				fullTextSearch: 'exact',
+			})
+			$('.ui.search.prod').search({
+				apiSettings : {
+					url: '{% url "kfet.views.getProducts" %}?prod={query}'
+				},
+				debug: false,
+				verbose: true
+			})
+			$('.ui.checkbox').checkbox();
+		</script>
+		
+		<script type = "text/javascript">
+			$('.mac.address').keyup(function (e) {
+				var r = /([a-f0-9]{2})/i;
+  				var str = e.target.value.replace(/[^a-f0-9:]/ig, "");
+  				if (e.keyCode != 8 && r.test(str.slice(-2))) {
+    				str = str.concat(':')
+  				}
+  				e.target.value = str.slice(0, 17);
+			});
+		</script>
+		
+		<script>
+			function test_checkbox(){
+			if (document.getElementById('checkbox').checked) {
+				document.getElementById('sub').removeAttribute('disabled');
+			} else { 
+				document.getElementById('sub').disabled = "true";
+			}
+			}
+			var listpg = [];
+			function add_pg_to_list() {
+	    		var objTo = document.getElementById('pglist');
+	    		var pgselect = document.getElementById('pg').value;
+	    		var divsup = document.createElement("div");
+	    		divsup.setAttribute("class","item");
+	    		var idnb=listpg.length+1;
+	    		var idstr=idnb.toString();
+	    		divsup.setAttribute("id",idstr);
+	   			divsup.innerHTML = pgselect;
+	   			listpg.push(pgselect + "|$|");
+	    		objTo.appendChild(divsup);
+	    		field = document.getElementById('pg');
+	    		field.value = "";
+			}
+			function remove_pg_from_list() {
+				listpg.pop();
+				var idnb=listpg.length+1;
+	    		var idstr=idnb.toString();
+				var elem = document.getElementById(idstr);
+	  			elem.parentNode.removeChild(elem);
+			}
+			function send_data() {
+				var chaine_pg = "";
+				for (i = 0; i < listpg.length; i++) { 
+	    			chaine_pg += listpg[i];
+				}
+				field = document.getElementById('pgs');
+	    		field.value = chaine_pg;
+	    		document.getElementById('master_form').submit();
+			}
+			var listitems = [];
+			function add_item_to_list() {
+	    		var objTo = document.getElementById('itemlist');
+	    		var itemselect = document.getElementById('item_id').value;
+	    		var qtyselect = document.getElementById('quantity').value;
+	    		var divsup = document.createElement("div");
+	    		divsup.setAttribute("class","item");
+	    		var idnb=listitems.length+1;
+	    		var idstr=idnb.toString();
+	    		divsup.setAttribute("id",idstr);
+	   			divsup.innerHTML = itemselect;
+	   			listitems.push(itemselect + "|$|");
+	    		objTo.appendChild(divsup);
+	    		field = document.getElementById('item');
+	    		field.value = "";
+			}
+			function send_data_elec() {
+				var chaine_item = "";
+				for (i = 0; i < listitems.length; i++) { 
+	    			chaine_pg += listitems[i];
+				}
+				field = document.getElementById('items');
+	    		field.value = chaine_item;
+	    		document.getElementById('master_form').submit();
+			}
+			var today = new Date();
+			$('#metro_calendar').calendar({
+			monthFirst: false,
+			ampm: false,
+			minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+			formatter: {
+	    	date: function (date, settings) {
+	    	if (!date) return '';
+	    		var day = date.getDate();
+	    		var month = date.getMonth() + 1;
+	    		var year = date.getFullYear();
+	    		return day + '/' + month + '/' + year;
+			 }
+			 }
+			})
+			var today1 = new Date();
+			$('#appro_calendar').calendar({
+			type: 'date',
+			monthFirst: false,
+			minDate: new Date(today1.getFullYear(), today1.getMonth(), today1.getDate()),
+			formatter: {
+	    	date: function (date, settings) {
+	    	if (!date) return '';
+	    		var day = date.getDate();
+	    		var month = date.getMonth() + 1;
+	    		var year = date.getFullYear();
+	    		return day + '/' + month + '/' + year;
+			 }
+			 }
+			});
+			var today2 = new Date();
+			$('#facture_calendar').calendar({
+			monthFirst: false,
+			type: 'date',
+			ampm: false,
+			maxDate: new Date(today2.getFullYear(), today2.getMonth(), today2.getDate()),
+			formatter: {
+	    	date: function (date, settings) {
+	    	if (!date) return '';
+	    		var day = date.getDate();
+	    		var month = date.getMonth() + 1;
+	    		var year = date.getFullYear();
+	    		return day + '/' + month + '/' + year;
+			 }
+			 }
+			})
+		</script>
+	
+	</footer>
+</html>
